@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Card Generator</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>✨ User Profile Card Generator</h1>
+    <p class="subtitle">Create beautiful profile cards instantly</p>
+
+    <form id="profileForm">
+
+        <input
+            type="text"
+            id="name"
+            placeholder="👤 Enter Name"
+            required
+        >
+
+        <textarea
+            id="bio"
+            rows="4"
+            placeholder="📝 Enter Bio"
+            required
+        ></textarea>
+
+        <input
+            type="text"
+            id="imageUrl"
+            placeholder="🖼️ Enter Image URL"
+            required
+        >
+
+        <button type="submit">
+            Generate Profile
+        </button>
+
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        
+
+        document
+        .getElementById("profileForm")
+        .addEventListener("submit", async function(e){
+
+            e.preventDefault();
+
+            const data = {
+                name: document.getElementById("name").value,
+                bio: document.getElementById("bio").value,
+                imageUrl: document.getElementById("imageUrl").value
+            };
+
+            const response = await fetch(
+                "http://localhost:5000/profile",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }
+            );
+
+            const user = await response.json();
+
+            document.getElementById("result").innerHTML = `
+            <div class="card">
+
+            <img src="${user.imageUrl}" alt="Profile">
+
+            <h2>${user.name}</h2>
+
+            <p>${user.bio}</p>
+
+            </div>
+            `;
+        });
+        
+
+    </script>
+
+</body>
+</html>
